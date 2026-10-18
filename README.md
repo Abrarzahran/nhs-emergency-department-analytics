@@ -2,6 +2,8 @@
 
 An analysis of NHS England's monthly A&E attendances and emergency admissions from April 2025 to March 2026. The data are cleaned and checked with Python and pandas, stored in SQLite, queried with SQL and explored in a Streamlit dashboard. The results are compared with the figures NHS England published.
 
+Live dashboard: [nhs-emergency-department-analytics.streamlit.app](https://nhs-emergency-department-analytics-mxhkvdmvqcsy8chtqya7ph.streamlit.app/). If the app has been idle it may need a short time to start.
+
 ![Dashboard overview](docs/images/overview.png)
 
 ## Data
@@ -48,7 +50,7 @@ The dashboard builds the database itself if it is missing, but `run_queries.py` 
 
 ## Deployment
 
-The SQLite database is generated from the CSV files in `data/raw` and is not committed to the repository. When the dashboard starts and the database file is missing, it builds the file itself, which takes a few seconds, and caches the result for the life of the server process. Running `python scripts/build_database.py` first is therefore optional for the dashboard.
+The dashboard is deployed on Streamlit Community Cloud at the link at the top of this page. The SQLite database is generated from the CSV files in `data/raw` and is not committed to the repository. When the dashboard starts and the database file is missing, it builds the file itself, which takes a few seconds, and caches the result for the life of the server process. Running `python scripts/build_database.py` first is therefore optional for the dashboard.
 
 On Streamlit Community Cloud, create the app from this repository with `app/streamlit_app.py` as the main file and Python 3.12 or 3.13. The dependencies come from `requirements.txt`. If the app shows an error about failed validation checks, running the build script locally prints the details.
 
