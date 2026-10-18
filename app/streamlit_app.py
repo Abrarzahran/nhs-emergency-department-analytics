@@ -1,7 +1,7 @@
 """Streamlit dashboard for NHS England A&E attendances and emergency admissions, 2025/26.
 
-Run with `streamlit run app/streamlit_app.py`, after building the database
-with `python scripts/build_database.py`.
+Run with `streamlit run app/streamlit_app.py`. If the database is missing, the app builds it
+from the CSV files in data/raw. `python scripts/build_database.py` builds it in advance.
 """
 import sqlite3
 import sys
@@ -17,6 +17,7 @@ import streamlit as st  # noqa: E402
 from nhs_ed import queries  # noqa: E402
 from nhs_ed.config import DB_PATH, PROCESSED_DIR, RAW_DIR, SOURCE_URL  # noqa: E402
 from nhs_ed.metrics import add_rates, pct_within_4h  # noqa: E402
+from nhs_ed.pipeline import build  # noqa: E402
 
 st.set_page_config(page_title="NHS A&E Performance 2025/26", layout="wide")
 
@@ -36,6 +37,21 @@ LABELS = {
 
 
 # Data access
+@st.cache_resource(show_spinner="Building the database from the NHS England source files. This takes a few seconds.")
+def ensure_database():
+    """Build the SQLite database from the CSV files in data/raw if it does not exist.
+
+    The database is not committed to the repository, so a fresh deployment, for example on
+    Streamlit Community Cloud, has to build it. The result is cached, so the build runs once
+    per server process and not on every interaction.
+    """
+    if not DB_PATH.exists():
+        result = build(DB_PATH, write_reports=False)
+        if result.db_path is None:
+            return result.errors
+    return []
+
+
 @st.cache_resource
 def get_connection():
     # Opened read-only, so the dashboard cannot modify the data.
@@ -43,7 +59,13 @@ def get_connection():
 
 
 if not DB_PATH.exists():
-    st.error("Database not found. Build it first with:  `python scripts/build_database.py`")
+    ensure_database.clear()  # the file was removed after an earlier build, so build it again
+failed_checks = ensure_database()
+if failed_checks or not DB_PATH.exists():
+    st.error("The database could not be built because validation checks failed. "
+             "Run `python scripts/build_database.py` locally to see the details.")
+    for c in failed_checks:
+        st.write(f"{c.name}: {c.detail}")
     st.stop()
 
 con = get_connection()

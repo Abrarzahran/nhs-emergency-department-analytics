@@ -39,12 +39,18 @@ source .venv/bin/activate        # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
 python scripts/build_database.py   # clean, validate and load the data into SQLite
-python -m pytest                   # runs the 74 tests
+python -m pytest                   # runs the 78 tests
 python scripts/run_queries.py      # runs the 10 SQL analyses in sql/queries/
 streamlit run app/streamlit_app.py
 ```
 
-The build stops if a file header changes or a validation check fails. The main check is that the organisation rows add up exactly to NHS England's own TOTAL row for every column and month. The tests also compare the results with figures from NHS England's published commentary. The reasons for the main design choices are in [docs/DECISIONS.md](docs/DECISIONS.md).
+The dashboard builds the database itself if it is missing, but `run_queries.py` needs it built first. The build stops if a file header changes or a validation check fails. The main check is that the organisation rows add up exactly to NHS England's own TOTAL row for every column and month. The tests also compare the results with figures from NHS England's published commentary. The reasons for the main design choices are in [docs/DECISIONS.md](docs/DECISIONS.md).
+
+## Deployment
+
+The SQLite database is generated from the CSV files in `data/raw` and is not committed to the repository. When the dashboard starts and the database file is missing, it builds the file itself, which takes a few seconds, and caches the result for the life of the server process. Running `python scripts/build_database.py` first is therefore optional for the dashboard.
+
+On Streamlit Community Cloud, create the app from this repository with `app/streamlit_app.py` as the main file and Python 3.12 or 3.13. The dependencies come from `requirements.txt`. If the app shows an error about failed validation checks, running the build script locally prints the details.
 
 ## Method notes and limitations
 
