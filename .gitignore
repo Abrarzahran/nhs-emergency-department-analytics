@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+.DS_Store
+# Rebuilt in seconds by scripts/build_database.py:
+data/processed/*.sqlite
+data/processed/query_results/

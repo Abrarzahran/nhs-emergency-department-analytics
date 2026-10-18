@@ -1,0 +1,14 @@
+check,passed,severity,detail
+"12 contiguous months, Apr 2025 - Mar 2026",True,error,found 12 months
+"No duplicate (org_code, month) rows",True,error,0 duplicates
+No nulls or negative counts,True,error,"0 nulls, 0 negatives"
+Exactly one published TOTAL row per month,True,error,12 total rows
+"Organisation rows sum to published TOTAL (all 18 columns, all months)",True,error,largest absolute difference = 0
+"Waits over 4h never exceed attendances (all types, booked and unbooked)",True,error,0 violations
+Type 1 emergency admissions never exceed Type 1 attendances,True,error,0 violations
+Each organisation stays in one region,True,error,0 organisations changed region
+Every organisation with Type 1 activity reports in all 12 months,True,warning,0 of 121 incomplete
+Organisations whose name changed during the year (handled by keying on org_code),True,warning,4 organisations renamed
+Org-months where over-12h DTA waits exceed 4-12h DTA waits (kept as published),True,warning,332 org-months
+Every organisation reporting Type 1 activity has a 3-character trust code (definitions v5.0),True,warning,0 of 121 not 3 characters
+Org-type series averaging 200 or fewer attendances a month (below the definitions' classification threshold; kept as published),True,warning,11 of 338 active series
