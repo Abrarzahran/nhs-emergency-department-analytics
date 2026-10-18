@@ -26,6 +26,7 @@ TYPE_COLOURS = {"Type 1": "#2a78d6", "Type 2": "#eb6834", "Other": "#1baf7a"}
 TYPE_LABELS = {"Type 1": "Type 1", "Type 2": "Type 2", "Other": "Other A&E department"}
 CATEGORICAL = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"]
 SEQ_BLUE = "#2a78d6"
+GITHUB_URL = "https://github.com/Abrarzahran/nhs-emergency-department-analytics"
 
 # Readable names for chart axes and hover text.
 LABELS = {
@@ -147,6 +148,7 @@ st.sidebar.caption("Rates are always computed from summed counts, never by avera
 st.sidebar.markdown(f"[Official source page]({SOURCE_URL})")
 
 st.title("NHS Emergency Department Performance, 2025/26")
+st.caption("Developed by Abrar Zahran | Python · SQL · Streamlit")
 st.caption(f"NHS England monthly A&E attendances and emergency admissions, {first_label} to {last_label}, "
            f"{len(sel_regions)} of {len(all_regions)} regions")
 
@@ -368,3 +370,7 @@ with tab_method:
     st.markdown(f"NHS England, *A&E Attendances and Emergency Admissions 2025-26*, monthly provider-level CSV files: <{SOURCE_URL}>. "
                 "Contains public sector information licensed under the Open Government Licence v3.0. "
                 "This is an independent project. It is not produced or endorsed by NHS England.")
+
+st.caption("Independent portfolio project using publicly available NHS England data. "
+           "Not affiliated with or endorsed by the NHS.")
+st.caption(f"[View on GitHub]({GITHUB_URL})")
